@@ -82,5 +82,5 @@ def run_inference(text, model, config):
 
 if __name__ == "__main__":
     model, config = load_demo()
-    label, score = run_inference("İzmir Türkiye'nin hangi bölgesindedir", model, config)
+    label, score = run_inference("bu durum sana ne ifade ediyor", model, config)
     print(f"Tahmin: {label} | Güven: {score:.2%}\n")

@@ -8,5 +8,5 @@ Modeli eğitmeden test etmek için:
 
 ## Özellikler
 - **Architecture:** Character-level Vision Transformer (ViT) based Text Encoder.
-- **Language:** Optimized for Turkish (includes specific characters) and English.
+- **Language:** Optimized for Turkish (includes specific characters).
 - **Task:** Binary classification (Question vs. Function/Action).

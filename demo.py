@@ -76,11 +76,11 @@ def run_inference(text, model, config):
         probs = torch.softmax(logits, dim=1)
         pred_idx = torch.argmax(probs, dim=1).item()
         
-    label = "Fonksiyon (Action)" if pred_idx == 1 else "Soru (Question)"
+    label = "Fonksiyon" if pred_idx == 1 else "Soru"
     conf = probs[0][pred_idx].item()
     return label, conf
 
 if __name__ == "__main__":
     model, config = load_demo()
-    label, score = run_inference("Bu bir soru mudur?", model, config)
+    label, score = run_inference("İzmir Türkiye'nin hangi bölgesindedir", model, config)
     print(f"Tahmin: {label} | Güven: {score:.2%}\n")

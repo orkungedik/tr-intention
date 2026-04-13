@@ -8,9 +8,9 @@ from huggingface_hub import hf_hub_download
 REPO_ID = "orkungedik/tr-intention"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-class TRintenion(nn.Module):
+class TRintention(nn.Module):
     def __init__(self, vocab_size, embed_dim, max_len, n_heads, n_layers):
-        super(TRintenion, self).__init__()
+        super(TRintention, self).__init__()
         self.max_len = max_len
         self.embed = nn.Embedding(vocab_size, embed_dim)
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
@@ -48,7 +48,7 @@ def load_demo():
         config = json.load(f)
 
     # Model objesini oluştur
-    model = TRintenion(
+    model = TRintention(
         vocab_size=config['vocab_size'],
         embed_dim=128, # Eğitimdeki değerler
         max_len=config['max_len'],

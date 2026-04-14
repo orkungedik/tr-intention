@@ -30,7 +30,6 @@ class TRintention(nn.Module):
     def forward(self, input_ids):
         b = input_ids.shape[0]
         
-        # PADDING MASK EKLENDİ (Tahminlerin bozulmaması için kritik)
         pad_mask = (input_ids == 0)
         cls_mask = torch.zeros((b, 1), dtype=torch.bool, device=input_ids.device)
         full_mask = torch.cat((cls_mask, pad_mask), dim=1)

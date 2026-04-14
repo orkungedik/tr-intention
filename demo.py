@@ -53,7 +53,6 @@ def load_demo():
     with open(config_path, 'r') as f:
         config = json.load(f)
 
-    # Model objesini oluştur
     model = TRintention(
         vocab_size=config['vocab_size'],
         embed_dim=128, # Eğitimdeki değerler
@@ -62,7 +61,6 @@ def load_demo():
         n_layers=4
     ).to(DEVICE)
 
-    # Ağırlıkları yükle
     model.load_state_dict(torch.load(model_path, map_location=DEVICE))
     model.eval()
     

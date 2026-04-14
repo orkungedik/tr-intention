@@ -11,7 +11,6 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class TRintention(nn.Module):
     def __init__(self, vocab_size, embed_dim, max_len, n_heads, n_layers):
         super(TRintention, self).__init__()
-        self.max_len = max_len
         self.embed = nn.Embedding(vocab_size, embed_dim)
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
         self.pos_embed = nn.Parameter(torch.zeros(1, max_len + 1, embed_dim))
@@ -28,13 +27,21 @@ class TRintention(nn.Module):
             nn.Linear(embed_dim, 2)
         )
 
-    def forward(self, x):
-        b = x.shape[0]
-        x = self.embed(x)
+    def forward(self, input_ids):
+        b = input_ids.shape[0]
+        
+        # PADDING MASK EKLENDİ (Tahminlerin bozulmaması için kritik)
+        pad_mask = (input_ids == 0)
+        cls_mask = torch.zeros((b, 1), dtype=torch.bool, device=input_ids.device)
+        full_mask = torch.cat((cls_mask, pad_mask), dim=1)
+        
+        x = self.embed(input_ids)
         cls_tokens = self.cls_token.expand(b, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
         x = x + self.pos_embed
-        x = self.transformer(x)
+        
+        # Maskeyi Transformer'a iletiyoruz
+        x = self.transformer(x, src_key_padding_mask=full_mask)
         return self.classifier(x[:, 0])
 
 def load_demo():
@@ -72,7 +79,7 @@ def run_inference(text, model, config):
     input_tensor = torch.tensor([ids + padding], dtype=torch.long).to(DEVICE)
 
     with torch.no_grad():
-        logits = model(input_tensor)
+        logits = model(input_tensor) # input_tensor artık maske için forward'da doğrudan kullanılıyor
         probs = torch.softmax(logits, dim=1)
         pred_idx = torch.argmax(probs, dim=1).item()
         

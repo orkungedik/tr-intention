@@ -38,9 +38,8 @@ class TRintention(nn.Module):
         cls_tokens = self.cls_token.expand(b, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
         x = x + self.pos_embed
-        
-        # Maskeyi Transformer'a iletiyoruz
         x = self.transformer(x, src_key_padding_mask=full_mask)
+        
         return self.classifier(x[:, 0])
 
 def load_demo():
